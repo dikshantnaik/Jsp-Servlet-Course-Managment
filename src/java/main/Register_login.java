@@ -47,7 +47,7 @@ public class Register_login {
         con = Dao.initSql();
         stmt = con.prepareStatement(query);
         stmt.setString(1,username);
-        stmt.setString(2, password);
+        stmt.setString(2, util.digest(password));
         stmt.executeUpdate();
         return "registered";
         }
