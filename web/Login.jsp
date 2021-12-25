@@ -6,6 +6,11 @@
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="main.*" %>
+<%@page import="java.sql.*" %>
+<%@page import="main.util.*" %>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +18,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form action="Controller" method="post">
+        <form action="Login.jsp" method="post">
         Username  <input type="text" name="username" ><br>  
         Password  <input type="text" name="password">
         <input type="submit" name="login" value ="Login">
@@ -22,3 +27,13 @@
 </html>
 
 
+<%
+  if (request.getParameter("login")!=null) {
+               Register_login obj = new Register_login();
+               String result =  obj.login(request.getParameter("username"),request.getParameter("password"));
+               
+                util.alert(out, result);
+                
+
+            }  
+%>

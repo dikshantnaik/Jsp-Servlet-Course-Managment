@@ -37,13 +37,7 @@ public class Controller extends HttpServlet {
                 out.print(result);
 alert(out, result);
             }
-            if (request.getParameter("login")!=null) {
-               String result =  obj.login(request.getParameter("username"),request.getParameter("password"));
-               
-                alert(out, result);
-                
-
-            }
+            
             
         }
         catch(Exception e){
