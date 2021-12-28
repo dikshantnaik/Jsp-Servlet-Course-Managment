@@ -1,0 +1,182 @@
+body {
+  background-image: url(img/bg.jpg);
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.container,
+.content,
+.course_cont,
+.course {
+  font-weight: bold;
+
+  position: absolute;
+  top: 10%;
+  left: 38%;
+  height: 600px;
+  width: 28%;
+  padding: 15px;
+
+  border-radius: 12px;
+  box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+  
+  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+}
+
+.field,
+.field_log {
+  padding: 6px;
+  outline: none;
+  width: 265px;
+  border-radius: 12px;
+  border: 1px solid black;
+  padding-left: 20px;
+  margin-left: 15%;
+  border: none;
+  border-top-left-radius: 0px;
+  /* border-bottom-left-radius: 0px; */
+  border-bottom-right-radius: 0px;
+
+  transition: 2s;
+  font-size: 14px;
+  background-color: rgb(255, 255, 255);
+  border-left: 3px solid black;
+  color: gray;
+}
+
+.field:hover,
+.field_log:hover {
+  border-left: 6px solid black;
+  border-bottom: 2px solid rgb(0, 0, 0);
+}
+
+.button5 {
+  position: absolute;
+
+  top: 90%;
+  left: 38%;
+  width: 3cm;
+  border-radius: 6px;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-decoration: none;
+  transition: 4s;
+  color: black;
+  background: white;
+
+  transition: 1s;
+}
+
+.button5_log {
+  top: 80%;
+  left: 33%;
+  width: 3.5cm;
+  height: 40px;
+  font-size: 20px;
+}
+
+.button5:hover {
+  background: rgb(0, 0, 0);
+
+  color: rgb(255, 255, 255);
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.5);
+}
+
+select {
+  /* margin-left: 2%; */
+  border-radius: 8px;
+  /* padding: 3px; */
+  outline: none;
+  transition: 1s;
+}
+
+select:hover {
+  outline: none;
+  border-left: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+span {
+  margin-left: 16%;
+}
+
+h2 {
+  margin-left: 25%;
+}
+
+.cont_login {
+  top: 20%;
+  height: 400px;
+  width: 24%;
+  font-size: 20px;
+}
+
+.field_log {
+  margin-left: 22px;
+  padding: 8px;
+}
+
+.cont_index {
+  left: 30%;
+
+  top: 20%;
+  height: 350px;
+  width: 46%;
+  font-size: 20px;
+  transition: 3s;
+}
+
+.cont_index:hover {
+  box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.322);
+}
+
+/* enroll */
+
+.content {
+  margin-top: 5%;
+
+  position: static;
+
+  top: 25%;
+  left: 75px;
+  height: auto;
+  width: 96%;
+  padding: 20px;
+}
+
+.course_cont {
+  margin-top: 5%;
+  position: static;
+  top: 10%;
+  height: 800px;
+  width: 96%;
+  left: 52%;
+  padding: 20px;
+  height: auto;
+}
+
+.course {
+  margin-top: 4%;
+
+  position: static;
+
+  top: 10%;
+  height: 100px;
+  width: 90%;
+  padding: 20px;
+  margin-left: 2%;
+}
+
+.but_enr {
+  position: static;
+  margin-top: 5%;
+  margin-left: 35%;
+}
