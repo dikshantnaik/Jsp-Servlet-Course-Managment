@@ -5,6 +5,10 @@
 package main;
 
 import java.security.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 
 /**
@@ -16,6 +20,25 @@ public class util {
     public static void alert(JspWriter out, String msg) throws Exception {
 
         out.println("<script>alert(\"" + msg + "\")</script>");
+    }
+    public static void logout(HttpServletRequest request,HttpServletResponse response) throws Exception{
+       
+        HttpSession session = request.getSession();
+        session.invalidate();
+        Cookie[] ck = request.getCookies();
+        for (int i = 0; i < ck.length; i++) {
+            if(ck[i].getName().equals("name") || ck[i].getName().equals("username"))
+            {
+                ck[i].setMaxAge(0);
+                response.addCookie(ck[i]);
+                response.sendRedirect("index.jsp");
+            }
+        }
+    }
+    public static void rememberMe(HttpServletRequest request,HttpServletResponse response){
+        HttpSession session = request.getSession();
+        Cookie ck = new Cookie("username",session.getAttribute("username").toString());
+        response.addCookie(ck);
     }
 
     public static String digest(String msg) throws NoSuchAlgorithmException {
@@ -32,4 +55,5 @@ public class util {
         }
         return new String(hexChars);
     }
+    
 }
