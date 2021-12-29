@@ -23,23 +23,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     </head>
     <body>
         <!--<div>TODO write content</d<iv>-->
+        
 
         <a href="Login.jsp">Login here </a> &nbsp;&nbsp;&nbsp;
         <a href ="Register.jsp">Sign Up </a>
         <form action="Controller" method="post"> <button type="submit" name="logout" > Logout </button></form>
+        <div class="content">
+        <% 
+            if (session.getAttribute("username") != null) {
 
+        %>
+        <h1> Welcome, <%= session.getAttribute("name") %></h1>
+
+        </div>
+        <%      }
+        %>
         <div class="course_cont">
             <h1>Available Course </h1>
-            <form action="index.php" method="post">
-                <%while (rs.next()) { %>
+            <form action="Course.jsp" method="get">
+                <%while (rs.next()) {%>
                 <div class="course">
                     <h1><%=rs.getString("course_name")%></h1>
 
-                    <h8 style="font-size: 20px;"><br> Prize 1000 Rs</h8>
-                    <button class="course_button button5 but_enr" type="submit"name="enrol_course" value="1" /> Enroll Now</button>
+                    <h8 style="font-size: 20px;"><br> <%= rs.getInt("course_prize")%></h8>
+                    <button class="course_button button5 but_enr" type="submit"name="course_id" value="<%= rs.getInt("course_id")%>"/> Enroll Now</button>
                 </div>
                 <% } %>
 
