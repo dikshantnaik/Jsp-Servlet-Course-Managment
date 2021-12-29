@@ -22,6 +22,11 @@ public class Controller extends HttpServlet {
             if(request.getParameter("logout")!=null){
                 util.logout(request,response);
             }
+            if(request.getParameter("SubmitReview")!=null){
+                out.print("Review");
+                String out1 = util.Review(request.getParameter("review"), request.getParameter("course_id"), request.getParameter("username"));
+                out.print(out1);
+            }
             
         }
         catch(Exception e){
