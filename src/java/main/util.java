@@ -5,10 +5,8 @@
 package main;
 
 import java.security.*;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.sql.*;
+import javax.servlet.http.*;
 import javax.servlet.jsp.JspWriter;
 
 /**
@@ -21,23 +19,24 @@ public class util {
 
         out.println("<script>alert(\"" + msg + "\")</script>");
     }
-    public static void logout(HttpServletRequest request,HttpServletResponse response) throws Exception{
-       
+
+    public static void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         HttpSession session = request.getSession();
         session.invalidate();
         Cookie[] ck = request.getCookies();
         for (int i = 0; i < ck.length; i++) {
-            if(ck[i].getName().equals("name") || ck[i].getName().equals("username"))
-            {
+            if (ck[i].getName().equals("name") || ck[i].getName().equals("username")) {
                 ck[i].setMaxAge(0);
                 response.addCookie(ck[i]);
                 response.sendRedirect("index.jsp");
             }
         }
     }
-    public static void rememberMe(HttpServletRequest request,HttpServletResponse response){
+
+    public static void rememberMe(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        Cookie ck = new Cookie("username",session.getAttribute("username").toString());
+        Cookie ck = new Cookie("username", session.getAttribute("username").toString());
         response.addCookie(ck);
     }
 
@@ -55,5 +54,23 @@ public class util {
         }
         return new String(hexChars);
     }
-    
+
+    public static String Review(String review, String course_id, String username) {
+        try{
+        String query = "INSERT INTO review VALUES(NULL,?,(SELECT studentid FROM students WHERE username = ?),NULL,?)";
+        Connection con = Dao.initSql();
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setString(1, course_id);
+        stmt.setString(2,username );
+        stmt.setString(3, review);
+        stmt.executeUpdate();
+        return "Done";
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return e.toString();
+        }
+        
+    }
+
 }
