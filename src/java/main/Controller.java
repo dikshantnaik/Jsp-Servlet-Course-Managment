@@ -21,6 +21,7 @@ public class Controller extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             if(request.getParameter("logout")!=null){
                 util.logout(request,response);
+                response.sendRedirect("index.jsp");
             }
             if(request.getParameter("SubmitReview")!=null){
                 out.print("Review");
