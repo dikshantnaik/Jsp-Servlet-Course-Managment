@@ -56,21 +56,71 @@ public class util {
     }
 
     public static String Review(String review, String course_id, String username) {
-        try{
-        String query = "INSERT INTO review VALUES(NULL,?,(SELECT studentid FROM students WHERE username = ?),NULL,?)";
-        Connection con = Dao.initSql();
-        PreparedStatement stmt = con.prepareStatement(query);
-        stmt.setString(1, course_id);
-        stmt.setString(2,username );
-        stmt.setString(3, review);
-        stmt.executeUpdate();
-        return "Done";
-        }
-        catch(Exception e){
+        try {
+            String query = "INSERT INTO review VALUES(NULL,?,(SELECT studentid FROM students WHERE username = ?),NULL,?)";
+            Connection con = Dao.initSql();
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, course_id);
+            stmt.setString(2, username);
+            stmt.setString(3, review);
+            stmt.executeUpdate();
+            return "Done";
+        } catch (Exception e) {
             System.out.println(e);
             return e.toString();
         }
-        
+
+    }
+
+    public static void removeItemFromCart(String cid, String username) {
+        try {
+            String query = "DELETE FROM cart WHERE sid = (SELECT studentid from students WHERE username=\"" + username + "\") and  cid= " + cid;
+
+            Connection con = Dao.initSql();
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.execute();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void addItemToCart(String username, String course_id) {
+        String query = "INSERT INTO cart VALUES((Select studentid FROM students WHERE username = ?),?)";
+        try {
+            Connection con = Dao.initSql();
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setInt(2, Integer.parseInt(course_id));
+            stmt.executeUpdate();
+            System.out.println(stmt.toString());
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void EnrollCourse(String username) {
+        try {
+            String Selecting_Query = "SELECT sid,cid FROM cart,students WHERE sid=students.studentid and username = \"" + username + "\"";
+            String Insrting_query;
+            String sid ;
+            Connection con = Dao.initSql();
+            PreparedStatement Select_stmt = con.prepareStatement(Selecting_Query);
+            ResultSet rs = Select_stmt.executeQuery();
+            while (rs.next()) {
+                 sid = rs.getString("sid");
+                Insrting_query = "INSERT INTO `enrolled_course`(id,student_id,course_id) VALUES (NULL,'" + sid + "' , '" + rs.getString("cid") + "')";
+                PreparedStatement Insert_stmt = con.prepareCall(Insrting_query);
+                Insert_stmt.executeUpdate();
+            }
+            String Delete_Query = "DELETE FROM `cart` WHERE sid=(Select studentid FROM students where username = '"+username+"')";
+            PreparedStatement Delete_stmt = con.prepareStatement(Delete_Query);
+            Delete_stmt.executeUpdate();
+            
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
 }

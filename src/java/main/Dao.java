@@ -44,3 +44,13 @@ static String database = "jsp-project";
 //  `students_revive` varchar(100) DEFAULT NULL,
 //   FOREIGN KEY(studentid) REFERENCES students(studentid),
 //    FOREIGN KEY(course_id) REFERENCES available_course(course_id)
+
+//Enroll
+///CREATE TABLE `jsp-project`.`enrolled_course`(
+//    `id` INT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+//    `student_id` INT NOT NULL,
+//    `course_id` INT NOT NULL,
+//    `enrolled_date` DATE DEFAULT CURRENT_DATE,
+//    FOREIGN KEY(student_id) REFERENCES students(studentid),
+//    FOREIGN KEY(course_id) REFERENCES available_course(course_id)
+//)

@@ -12,28 +12,22 @@
 
 <%
     boolean LogedIn = false;
-    String query = "SELECT * FROM available_course";
-    Connection con = Dao.initSql();
-    PreparedStatement stmt;
-    try {
 
-        stmt = con.prepareStatement(query);
-        ResultSet rs = stmt.executeQuery();
-
-        Cookie[] ck = request.getCookies();
-        if (ck != null) {
-            for (int i = 0; i < ck.length; i++) {
-                if (ck[i].getName().equals("name")) {
-                    session.setAttribute("name", ck[i].getValue());
-                } else if (ck[i].getName().equals("username")) {
-                    session.setAttribute("username", ck[i].getValue());
-                }
+    Cookie[] ck = request.getCookies();
+    if (ck != null) {
+        for (int i = 0; i < ck.length; i++) {
+            if (ck[i].getName().equals("name")) {
+                session.setAttribute("name", ck[i].getValue());
+            } else if (ck[i].getName().equals("username")) {
+                session.setAttribute("username", ck[i].getValue());
             }
         }
+    }
 
-        if (session.getAttribute("username") != null && session.getAttribute("name") != null) {
-            LogedIn = true;
-        }
+    if (session.getAttribute("username") != null && session.getAttribute("name") != null) {
+        LogedIn = true;
+        session.setAttribute("LogedIn", "true");
+    }
 
 %>
 <!DOCTYPE html>
@@ -83,17 +77,17 @@
 
                         %>
                         <ul class="navbar-nav ms-auto mx-5 ">
-                            <h5 class="text-white p-2 py-1" ><%= session.getValue("name")%></h5>
+
                             <li class="nav-item">
                                 <form action="Controller" method="post"> 
-                                    <button href="#learn" class=" btn btn-outline-primary px-3" name="logout" value="logoiut" style="height: 40px;">Log Out</button>
+                                    <a href="Cart.jsp" class="btn btn-primary" style="width:150px"> My Cart</a>
+                                    <button class=" btn btn-outline-danger px-3" name="logout" value="logoiut" style="height: 40px;">Log Out</button>
                                 </form>
                             </li>
 
 
                         </ul>
-                        <%                            } else {
-                        %>
+                        <%} else {%>
 
                         <ul class="navbar-nav ms-auto mx-5 ">
                             <li class="nav-item">
@@ -166,13 +160,58 @@
                                 </div>
                                 </section>
 
-                         
 
 
 
+                                <!--Enroled Course--> 
+
+                                <% if (LogedIn) {%>
+                                <!-- Enrolled Course Sections -->
+                                <%
+                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\""+session.getAttribute("username")+"\")";
+                                    Connection con = Dao.initSql();
+                                    PreparedStatement stmt;
+                                    try {
+
+                                        stmt = con.prepareStatement(query);
+                                        ResultSet rs = stmt.executeQuery();
+                                        
+                                %>
+                                <section id="instructors" class="p-5 bg-primary border-bottom">
+                                    <div class="container">
+                                        <h2 class="text-center text-white">Enrolled Course</h2>
+
+                                        <div class="row g-4">
+                                            <% while(rs.next()){%>
+                                            <div class="col-md-6 col-lg-3">
+                                                <div class="card bg-light">
+
+                                                    <div class="card-body text-center">
+                                                        <img
+                                                            src="https://prod-discovery.edx-cdn.org/media/course/image/156313d6-f892-4b08-9cee-43ea582f4dfb-7b98c686abcc.small.png"
+                                                            class="img-fluid img-responsive rounded product-image"
+                                                            alt=""
+                                                            />
+                                                        <h5 class="card-title mb-3 my-3"> <%=rs.getString("course_name") %></h5>
+                                                        <p class="card-text">
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                        
+                                            </div>
+                                                        <%}%>
+
+                                        </div>
+                                    </div>
+                                </section>
+                                                        
+                                                        <%}catch(SQLException e){
+                                                                System.out.println(e);
+                                                                }}%>
 
 
-                                <!-- Question Accordion -->
+                                <!-- Avalible  COurse  -->
                                 <section  id= "course" class="p-5 bg-primary">
                                     <div class="container">
                                         <h1 class="text-center text-white mb-4">Available Courses </h1>
@@ -180,15 +219,24 @@
                                             <div class="d-flex justify-content-center row">
                                                 <div class="col-md-10">
                                                     <!-- MAIN CARD -->
-                                                    <%while (rs.next()) {%>
+
+                                                    <%
+                                                        String query = "SELECT * FROM available_course LIMIT 5";
+                                                        Connection con = Dao.initSql();
+                                                        PreparedStatement stmt;
+                                                        try {
+
+                                                            stmt = con.prepareStatement(query);
+                                                            ResultSet rs = stmt.executeQuery();
+                                                            while (rs.next()) {%>
                                                     <div class="row bg-light  p-2 border rounded mt-2">
                                                         <div class="col-md-3 mt-1">
                                                             <img
-                                                                class="img-fluid img-responsive rounded product-image"
+                                                                class="img-fluid img-responsive rounded product-image my-3"
                                                                 src="https://prod-discovery.edx-cdn.org/media/course/image/156313d6-f892-4b08-9cee-43ea582f4dfb-7b98c686abcc.small.png"
                                                                 />
                                                         </div>
-                                                        <div class="col-md-6 mt-1">
+                                                        <div class="col-md-6 mt-1 ">
                                                             <h3><%= rs.getString("course_name")%></h3>
                                                             <div class="d-flex flex-row">
                                                                 <div class="ratings mr-2">
@@ -199,21 +247,19 @@
                                                                 <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
                                                                 </svg> <span class="">5.2</span>
                                                             </div>
-                                                            <div class="mt-1 mb-1 spec-1">
-                                                                <span>100% cotton</span><span class="dot"></span
-                                                                ><span>Light weight</span><span class="dot"></span
-                                                                ><span>Best finish<br /></span>
-                                                            </div>
-                                                            <div class="mt-1 mb-1 spec-1">
-                                                                <span>Unique design</span><span class="dot"></span
-                                                                ><span>For men</span><span class="dot"></span
-                                                                ><span>Casual<br /></span>
-                                                            </div>
-                                                            <p class="text-justify text-truncate para mb-0">
+                                                            <!--                                                            <div class="mt-1 mb-1 spec-1">
+                                                                                                                            <span>100% cotton</span><span class="dot"></span
+                                                                                                                            ><span>Light weight</span><span class="dot"></span
+                                                                                                                            ><span>Best finish<br /></span>
+                                                                                                                        </div>
+                                                                                                                        <div class="mt-1 mb-1 spec-1">
+                                                                                                                            <span>Unique design</span><span class="dot"></span
+                                                                                                                            ><span>For men</span><span class="dot"></span
+                                                                                                                            ><span>Casual<br /></span>
+                                                                                                                        </div>-->
+                                                            <p class="text-wrap text-truncate para mb-0">
                                                                 There are many variations of passages of Lorem Ipsum available,
-                                                                but the majority have suffered alteration in some form, by
-                                                                injected humour, or randomised words which don't look even
-                                                                slightly believable.<br /><br />
+                                                                .<br /><br />
                                                             </p>
                                                         </div>
                                                         <div
@@ -225,27 +271,45 @@
                                                             "
                                                             >
                                                             <div class="d-flex flex-row text-center " style="margin-left: 50px">
-                                                                <h4 class="mr-1"><%= rs.getInt("course_prize")%> Rs</h4>
+                                                                <h4 class="mr-1"><%= rs.getInt("course_price")%> Rs</h4>
 
                                                             </div>
                                                             <h6 class="text-success"> *Includes Certificate</h6>
-                                                            <div class="d-flex flex-column mt-4">
-                                                                <button class="btn btn-primary btn-sm" type="button">
-                                                                    Details</button
-                                                                ><button
+                                                            <form action="Course.jsp" >
+                                                                <div class="d-flex flex-column mt-4">
+
+                                                                    <button class="btn btn-primary btn-sm" type="submit">
+                                                                        Details</button
+                                                                    >
+                                                                    <input type="hidden" name="id" value="<%= rs.getString("course_id")%>"/>
+                                                                    <input type="hidden" name="name" value="<%= session.getAttribute("username")%>" />     
+                                                            </form>
+                                                            <form action="Controller" method="post" style="width: 500px;margin-left: 1px">
+                                                                <button
                                                                     class="btn btn-outline-primary btn-sm mt-2"
-                                                                    type="button"
+                                                                    name ="addToCart"
+                                                                    value="addToCary"
+                                                                    type="submit"
+                                                                    style="width: 200px"
                                                                     >
                                                                     Add to Cart
-                                                                </button>
-                                                            </div>
+                                                                </button
+                                                                <input type="hidden" name="id1" value="1"/>
+                                                                <input type="hidden" name="course_id" value="<%=rs.getString("course_id")%>">
+
+                                                                <input type="hidden" name="username" value="<%= session.getAttribute("username")%>" />
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                    <!-- End MAIN CARd -->
-                                                    <% }%>
+                                                </div>
+                                                <!-- End MAIN CARd -->
+                                                <% }%>
+                                                <div class="text-center">
+                                                    <a href="Courses.jsp"class="btn btn-light align-content-center my-4"> More Course </a>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                     </div>
                                 </section>
 
@@ -356,13 +420,21 @@
 
 
                                 </body>
+                                <footer> Frontend Taken from : https://www.frontendbootcampdemo.com/ 
+                                    https://github.com/bradtraversy/bootstrap-bootcamp-website
+                                </footer>
                                 </html>
                                 <%
                                     } catch (Exception e) {
                                         System.out.println(e);
                                         out.print(e);
                                     } finally {
-                                        con.close();
+                                        if (con != null) {
+                                            con.close();
+                                        } else {
+                                            util.alert(out, "Please Start or check the DB connection");
+
+                                        }
 
                                     }
                                 %>

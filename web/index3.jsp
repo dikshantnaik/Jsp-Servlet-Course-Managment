@@ -61,7 +61,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <div class="course">
                 <h1><%=rs.getString("course_name")%></h1>
 
-                <h8 style="font-size: 20px;"><br> <%= rs.getInt("course_prize")%></h8>
+                <h8 style="font-size: 20px;"><br> <%= rs.getInt("course_price")%></h8>
                 <button class="course_button button5 but_enr" type="submit"name="course_id" value="<%= rs.getInt("course_id")%>"/> Enroll Now</button>
             </div>
             <% } %>

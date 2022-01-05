@@ -28,7 +28,19 @@ public class Controller extends HttpServlet {
                 String out1 = util.Review(request.getParameter("review"), request.getParameter("course_id"), request.getParameter("username"));
                 out.print(out1);
             }
-            
+            if(request.getParameter("delete")!=null){
+                util.removeItemFromCart(request.getParameter("cid"), request.getParameter("username"));
+                response.sendRedirect("Cart.jsp");
+            }
+            if(request.getParameter("addToCart")!=null){
+            util.addItemToCart(request.getParameter("username"), request.getParameter("course_id"));
+                response.sendRedirect("index.jsp");
+        }
+            if(request.getParameter("EnrollCourse")!=null){
+                util.EnrollCourse(request.getParameter("username"));
+                response.sendRedirect("Cart.jsp");
+                
+            }
         }
         catch(Exception e){
             System.out.println(e);
