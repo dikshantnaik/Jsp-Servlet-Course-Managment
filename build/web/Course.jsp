@@ -155,40 +155,53 @@
                         </div>
                     </div>
                 </div>
-                <% }%>
+                <% }
+                    } catch (Exception e) {
+//        System.out.println(e);
+                        out.println(e);
+                    } %>
                 <!-- Review Div -->
                 <span style="font-style: italic; padding-top: 50px; font-size: 35px"
                       >Reviews
                 </span>
                 <div class="container">
-                    <div class="card">
+                    <%
+                        
+                        
+                        String review_query = "SELECT students.student_name,students_revive FROM `review`,students WHERE review.studentid = students.studentid AND course_id = " + course_id ;
+                        
+                        PreparedStatement stmt1;
+                        try {
+
+                            stmt1 = con.prepareStatement(review_query);
+                            ResultSet rs = stmt1.executeQuery();
+                               while (rs.next()) {
+
+                    %>
+                    <div class="card mt-3" style="height: 4cm;">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col">
                                     <img
                                         src="https://image.ibb.co/jw55Ex/def_face.jpg"
                                         class="img img-rounded img-fluid"
-                                        style="height: 100px; width: 100px"
+                                        style="height: 70px; width: 70px"
                                         />
                                 </div>
                                 <div class="col-md-10">
                                     <p>
-                                        <a
-                                            class="float-left"
-                                            href="https://maniruzzaman-akash.blogspot.com/p/contact.html"
-                                            ><strong>Maniruzzaman Akash</strong></a
-                                        >
+                                        <strong><%=rs.getString("student_name") %></strong>
+                                        
                                     </p>
                                     <div class="clearfix"></div>
                                     <p>
-                                        Lorem Ipsum is simply dummy text of the pr make but also the
-                                        leap into electronic typesetting, remaining essentially
-                                        unchanged. It was
+                                        <%= rs.getString("students_revive") %>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
+                                        <%}%>
                 </div>
                 <div
                     class="container border rounded-0"
