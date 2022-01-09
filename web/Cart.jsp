@@ -41,10 +41,16 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body class="bg-primary">
-        
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top" style="height:80px">
+            <div class="container">
+                <a href="index.jsp" class="btn btn-primary font-weight-bold" style="margin-bottom:50px">Go Back</a>
+            </div>
+        </nav>
+
+
+        <div class="container" >
+            <div class="row" >
+                <div class="col-12" style="margin-top:50px">
                     <h1
                         class="card-title text-white font-weight-bold text-center m-b-0"
                         >
@@ -66,11 +72,9 @@
                                 <!--Main Items--> 
                                 <%int total = 0;
                                     int i = 1;
-                                    if(rs.next()==false){
-                                        util.alert(out, "Cart Empty");
-                                    }
+                                  
                                     while (rs.next()) {
-                                        
+
                                         total = total + Integer.parseInt(rs.getString("course_price"));
                                 %>
                                 <tbody class="customtable">
@@ -88,7 +92,7 @@
                                         <td><%= rs.getString("course_price")%></td>
                                         <td>
                                             <form action="Controller" method="post">
-                                                <input type="hidden" name="cid" value="<%=rs.getString("cid")%>">
+                                                <input type="hidden" name="course_id" value="<%=rs.getString("cid")%>">
                                                 <input type="hidden" name="username" value="<%= session.getAttribute("username")%>">
                                                 <button
                                                     class="btn btn-danger btn-sm rounded"
@@ -115,13 +119,13 @@
                                                     <th scope="col"><%= total%></th>
                                                     <th>
                                                         <form action="Controller" method="post">
-                                                        <button class="btn btn-success " name = "EnrollCourse" value="true" style="width: 150px">Enroll</button>
-                                                        <input type="hidden" name="username" value="<%= session.getAttribute("username") %>">
-                                                               </form>
-                                                        </th>
+                                                            <button class="btn btn-success " name = "EnrollCourse" value="true" style="width: 150px">Enroll</button>
+                                                            <input type="hidden" name="username" value="<%= session.getAttribute("username")%>">
+                                                        </form>
+                                                    </th>
                                                     </tr>
                                                     </thead>
-                                                    
+
                                                     </table>
                                                     </div>
                                                     </div>

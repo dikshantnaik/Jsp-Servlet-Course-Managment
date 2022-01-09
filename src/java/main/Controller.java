@@ -1,6 +1,7 @@
 package main;
 
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 
 
 import javax.servlet.annotation.WebServlet;
@@ -19,17 +20,21 @@ public class Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     {
         try (PrintWriter out = response.getWriter()) {
+            
             if(request.getParameter("logout")!=null){
                 util.logout(request,response);
                 response.sendRedirect("index.jsp");
             }
             if(request.getParameter("SubmitReview")!=null){
-                out.print("Review");
+               
                 String out1 = util.Review(request.getParameter("review"), request.getParameter("course_id"), request.getParameter("username"));
-                out.print(out1);
+                System.out.println(out1);
+                RequestDispatcher rd = request.getRequestDispatcher("Course.jsp");
+                
+                rd.forward(request, response);
             }
             if(request.getParameter("delete")!=null){
-                util.removeItemFromCart(request.getParameter("cid"), request.getParameter("username"));
+                util.removeItemFromCart(request.getParameter("course_id"), request.getParameter("username"));
                 response.sendRedirect("Cart.jsp");
             }
             if(request.getParameter("addToCart")!=null){
@@ -40,6 +45,7 @@ public class Controller extends HttpServlet {
                 util.EnrollCourse(request.getParameter("username"));
                 response.sendRedirect("Cart.jsp");
                 
+                
             }
         }
         catch(Exception e){
@@ -47,6 +53,10 @@ public class Controller extends HttpServlet {
         }
         
         
+    }
+    protected void doGet(HttpServletRequest request , HttpServletResponse respone){
+     String param=    request.getParameter("course_id");
+        System.out.println(param);
     }
 
   

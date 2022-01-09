@@ -50,6 +50,9 @@
             if(request.getParameter("remember")!=null){
                 Cookie ck = new Cookie("username", request.getParameter("username"));
                 Cookie ck1 = new Cookie("name", result[2]);
+//                86400 is seconds of one day ..
+                ck.setMaxAge(86400*30);
+                ck1.setMaxAge(86400*30);
                 response.addCookie(ck);
                 response.addCookie(ck1);
             }

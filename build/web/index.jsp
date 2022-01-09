@@ -8,12 +8,14 @@
 
 <%@page import="main.*" %>
 <%@page import="java.sql.*" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+
 
 <%
     boolean LogedIn = false;
 
     Cookie[] ck = request.getCookies();
+    
+    
     if (ck != null) {
         for (int i = 0; i < ck.length; i++) {
             if (ck[i].getName().equals("name")) {
@@ -168,7 +170,7 @@
                                 <% if (LogedIn) {%>
                                 <!-- Enrolled Course Sections -->
                                 <%
-                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\""+session.getAttribute("username")+"\")";
+                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\""+session.getAttribute("username")+"\") Group by course_name";
                                     Connection con = Dao.initSql();
                                     PreparedStatement stmt;
                                     try {
@@ -281,7 +283,7 @@
                                                                     <button class="btn btn-primary btn-sm" type="submit">
                                                                         Details</button
                                                                     >
-                                                                    <input type="hidden" name="id" value="<%= rs.getString("course_id")%>"/>
+                                                                    <input type="hidden" name="course_id" value="<%= rs.getString("course_id")%>"/>
                                                                     <input type="hidden" name="name" value="<%= session.getAttribute("username")%>" />     
                                                             </form>
                                                             <form action="Controller" method="post" style="width: 500px;margin-left: 1px">

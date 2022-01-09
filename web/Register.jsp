@@ -1,5 +1,5 @@
 <%@page import="java.util.List"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+
 <%-- 
     Document   : Login
     Created on : Dec 20, 2021, 10:55:15 AM
