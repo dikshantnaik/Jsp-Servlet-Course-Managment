@@ -14,8 +14,7 @@
     boolean LogedIn = false;
 
     Cookie[] ck = request.getCookies();
-    
-    
+
     if (ck != null) {
         for (int i = 0; i < ck.length; i++) {
             if (ck[i].getName().equals("name")) {
@@ -170,21 +169,21 @@
                                 <% if (LogedIn) {%>
                                 <!-- Enrolled Course Sections -->
                                 <%
-                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\""+session.getAttribute("username")+"\") Group by course_name";
+                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\"" + session.getAttribute("username") + "\") Group by course_name";
                                     Connection con = Dao.initSql();
                                     PreparedStatement stmt;
                                     try {
 
                                         stmt = con.prepareStatement(query);
                                         ResultSet rs = stmt.executeQuery();
-                                        
+
                                 %>
                                 <section id="instructors" class="p-5 bg-primary border-bottom">
                                     <div class="container">
                                         <h2 class="text-center text-white">Enrolled Course</h2>
 
                                         <div class="row g-4">
-                                            <% while(rs.next()){%>
+                                            <% while (rs.next()) {%>
                                             <div class="col-md-6 col-lg-3">
                                                 <div class="card bg-light">
 
@@ -194,23 +193,24 @@
                                                             class="img-fluid img-responsive rounded product-image"
                                                             alt=""
                                                             />
-                                                        <h5 class="card-title mb-3 my-3"> <%=rs.getString("course_name") %></h5>
+                                                        <h5 class="card-title mb-3 my-3"> <%=rs.getString("course_name")%></h5>
                                                         <p class="card-text">
 
                                                         </p>
                                                     </div>
                                                 </div>
-                                                        
+
                                             </div>
-                                                        <%}%>
+                                            <%}%>
 
                                         </div>
                                     </div>
                                 </section>
-                                                        
-                                                        <%}catch(SQLException e){
-                                                                System.out.println(e);
-                                                                }}%>
+
+                                <%} catch (SQLException e) {
+                                            System.out.println(e);
+                                        }
+                                    }%>
 
 
                                 <!-- Avalible  COurse  -->
@@ -231,79 +231,74 @@
                                                             stmt = con.prepareStatement(query);
                                                             ResultSet rs = stmt.executeQuery();
                                                             while (rs.next()) {%>
-                                                    <div class="row bg-light  p-2 border rounded mt-2">
-                                                        <div class="col-md-3 mt-1">
-                                                            <img
-                                                                class="img-fluid img-responsive rounded product-image my-3"
-                                                                src="https://prod-discovery.edx-cdn.org/media/course/image/156313d6-f892-4b08-9cee-43ea582f4dfb-7b98c686abcc.small.png"
-                                                                />
-                                                        </div>
-                                                        <div class="col-md-6 mt-1 ">
-                                                            <h3><%= rs.getString("course_name")%></h3>
-                                                            <div class="d-flex flex-row">
-                                                                <div class="ratings mr-2">
-                                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                    <a style= "
+                                                       text-decoration: none;"href="Course.jsp?course_id= <%= rs.getString("course_id")%>" >
+                                                        <div class="row bg-light  p-2 border rounded mt-2">
+                                                            <div class="col-md-3 mt-1">
+                                                                <img
+                                                                    class="img-fluid img-responsive rounded product-image my-3"
+                                                                    src="https://prod-discovery.edx-cdn.org/media/course/image/156313d6-f892-4b08-9cee-43ea582f4dfb-7b98c686abcc.small.png"
+                                                                    />
+                                                            </div>
+                                                            <div class="col-md-6 mt-1 ">
+                                                                <h3 style="color: black"><%= rs.getString("course_name")%></h3>
+                                                              
+                                                                <!--                                                            <div class="mt-1 mb-1 spec-1">
+                                                                                                                                <span>100% cotton</span><span class="dot"></span
+                                                                                                                                ><span>Light weight</span><span class="dot"></span
+                                                                                                                                ><span>Best finish<br /></span>
+                                                                                                                            </div>
+                                                                                                                            <div class="mt-1 mb-1 spec-1">
+                                                                                                                                <span>Unique design</span><span class="dot"></span
+                                                                                                                                ><span>For men</span><span class="dot"></span
+                                                                                                                                ><span>Casual<br /></span>
+                                                                                                                            </div>-->
+                                                                <p style="color: black"class="text-wrap text-truncate para mb-0">
+                                                                    There are many variations of passages of Lorem Ipsum available,
+                                                                    .<br /><br />
+                                                                </p>
+                                                            </div>
+                                                            <div
+                                                                class="
+                                                                align-items-center align-content-center
+                                                                col-md-3
+                                                                border-left
+                                                                mt-1
+                                                                "
+                                                                >
+                                                                <div class="d-flex flex-row text-center " style="margin-left: 50px">
+                                                                    <h4 class="mr-1" style="color: #B12704;"> ₹ <%= rs.getInt("course_price")%></h4>
 
                                                                 </div>
-                                                                <svg style="margin-left: 3px ; margin-top:3px ;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
-                                                                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
-                                                                </svg> <span class="">5.2</span>
+                                                                <h6 class="text-success"> *Includes Certificate</h6>
+                                                                <form action="Course.jsp" >
+                                                                    <div class="d-flex flex-column mt-4">
+
+                                                                        <button class="btn btn-primary btn-sm" type="submit">
+                                                                            Details</button
+                                                                        >
+                                                                        <input type="hidden" name="course_id" value="<%= rs.getString("course_id")%>"/>
+                                                                        <input type="hidden" name="name" value="<%= session.getAttribute("username")%>" />     
+                                                                </form>
+                                                                <form action="Controller" method="post" style="width: 500px;margin-left: 1px">
+                                                                    <button
+                                                                        class="btn btn-outline-primary btn-sm mt-2"
+                                                                        name ="addToCart"
+                                                                        value="addToCary"
+                                                                        type="submit"
+                                                                        style="width: 200px"
+                                                                        >
+                                                                        Add to Cart
+                                                                    </button
+                                                                    <input type="hidden" name="id1" value="1"/>
+                                                                    <input type="hidden" name="course_id" value="<%=rs.getString("course_id")%>">
+
+                                                                    <input type="hidden" name="username" value="<%= session.getAttribute("username")%>" />
+                                                                </form>
                                                             </div>
-                                                            <!--                                                            <div class="mt-1 mb-1 spec-1">
-                                                                                                                            <span>100% cotton</span><span class="dot"></span
-                                                                                                                            ><span>Light weight</span><span class="dot"></span
-                                                                                                                            ><span>Best finish<br /></span>
-                                                                                                                        </div>
-                                                                                                                        <div class="mt-1 mb-1 spec-1">
-                                                                                                                            <span>Unique design</span><span class="dot"></span
-                                                                                                                            ><span>For men</span><span class="dot"></span
-                                                                                                                            ><span>Casual<br /></span>
-                                                                                                                        </div>-->
-                                                            <p class="text-wrap text-truncate para mb-0">
-                                                                There are many variations of passages of Lorem Ipsum available,
-                                                                .<br /><br />
-                                                            </p>
                                                         </div>
-                                                        <div
-                                                            class="
-                                                            align-items-center align-content-center
-                                                            col-md-3
-                                                            border-left
-                                                            mt-1
-                                                            "
-                                                            >
-                                                            <div class="d-flex flex-row text-center " style="margin-left: 50px">
-                                                                <h4 class="mr-1" style="color: #B12704;"> ₹ <%= rs.getInt("course_price")%></h4>
-
-                                                            </div>
-                                                            <h6 class="text-success"> *Includes Certificate</h6>
-                                                            <form action="Course.jsp" >
-                                                                <div class="d-flex flex-column mt-4">
-
-                                                                    <button class="btn btn-primary btn-sm" type="submit">
-                                                                        Details</button
-                                                                    >
-                                                                    <input type="hidden" name="course_id" value="<%= rs.getString("course_id")%>"/>
-                                                                    <input type="hidden" name="name" value="<%= session.getAttribute("username")%>" />     
-                                                            </form>
-                                                            <form action="Controller" method="post" style="width: 500px;margin-left: 1px">
-                                                                <button
-                                                                    class="btn btn-outline-primary btn-sm mt-2"
-                                                                    name ="addToCart"
-                                                                    value="addToCary"
-                                                                    type="submit"
-                                                                    style="width: 200px"
-                                                                    >
-                                                                    Add to Cart
-                                                                </button
-                                                                <input type="hidden" name="id1" value="1"/>
-                                                                <input type="hidden" name="course_id" value="<%=rs.getString("course_id")%>">
-
-                                                                <input type="hidden" name="username" value="<%= session.getAttribute("username")%>" />
-                                                            </form>
-                                                        </div>
-                                                    </div>
                                                 </div>
+                                                </a>
                                                 <!-- End MAIN CARd -->
                                                 <% }%>
                                                 <div class="text-center">
