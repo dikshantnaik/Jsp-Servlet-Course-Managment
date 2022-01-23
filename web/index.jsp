@@ -273,7 +273,7 @@
                                                             "
                                                             >
                                                             <div class="d-flex flex-row text-center " style="margin-left: 50px">
-                                                                <h4 class="mr-1"><%= rs.getInt("course_price")%> Rs</h4>
+                                                                <h4 class="mr-1" style="color: #B12704;"> ₹ <%= rs.getInt("course_price")%></h4>
 
                                                             </div>
                                                             <h6 class="text-success"> *Includes Certificate</h6>

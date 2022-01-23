@@ -6,14 +6,21 @@
 
 <%
     boolean LogedIn = false;
-    String query = "SELECT * FROM available_course ";
+    String query;
+    if (request.getParameter("search_query") != null) {
+        query = "SELECT * FROM `available_course` WHERE course_name LIKE \"%" + request.getParameter("search_query") + "%\"  or course_discription LIKE \"%" + request.getParameter("search_query")+" %\" ";
+    }
+    else{
+    query = "SELECT * FROM available_course ";
+    }
+    System.out.println(query);
     Connection con = Dao.initSql();
     PreparedStatement stmt;
     try {
 
         stmt = con.prepareStatement(query);
         ResultSet rs = stmt.executeQuery();
-           Cookie[] ck = request.getCookies();
+        Cookie[] ck = request.getCookies();
         if (ck != null) {
             for (int i = 0; i < ck.length; i++) {
                 if (ck[i].getName().equals("name")) {
@@ -26,13 +33,13 @@
 
         if (session.getAttribute("username") != null && session.getAttribute("name") != null) {
             LogedIn = true;
-            session.setAttribute("LogedIn","true");
+            session.setAttribute("LogedIn", "true");
         }
 %>
 
 <!DOCTYPE html>
 <html lang="en">
-     <head>
+    <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,12 +58,16 @@
             href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
             rel="stylesheet"
             />
-
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+            />
+        <<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <title >Course Management </title>
     </head >
     <body class="bg-primary">
 
-<!-- Navbar -->
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
             <div class="container ">
                 <a href="index.jsp" class="navbar-brand font-weight-bold">Course Management</a>
@@ -107,11 +118,25 @@
                 </div>
             </div>
         </nav>
-                        
+
         <!-- Avalible  COurse  -->
         <section  id= "course" class="p-5 bg-primary">
             <div class="container align-content-center">
                 <h1 class="text-center text-white mb-4">Available Courses </h1>
+                
+                <!--Searcg Bar-->
+                <div class="input-group rounded" ">
+                    <form action="Courses.jsp" style="width:" >
+                    <input type="search" class="form-control rounded" name="search_query" placeholder="Search" aria-label="Search" aria-describedby="search-addon" > 
+                                        
+
+                    <!--<span class="input-group-text border-0" id="search-addon">-->
+                        <button type= "submit" class="bi bi-search" style="width: 70px ">
+                    
+                        </button>
+                      </form>
+                    
+                </div>
                 <div class="container mt-5 mb-5">
                     <div class="d-flex justify-content-center row">
                         <div class="col-md-10">
@@ -192,7 +217,7 @@
                         </div>
                         <!-- End MAIN CARd -->
                         <% }%>
-                        
+
                     </div>
                 </div>
             </div>
@@ -200,17 +225,17 @@
     </section>
 </body>
 </html>
- <%
-                                    } catch (Exception e) {
-                                        System.out.println(e);
-                                        out.print(e);
-                                    } finally {
-                                        if (con != null) {
-                                            con.close();
-                                        } else {
-                                            util.alert(out, "Please Start or check the DB connection");
+<%
+    } catch (Exception e) {
+        System.out.println(e);
+        out.print(e);
+    } finally {
+        if (con != null) {
+            con.close();
+        } else {
+            util.alert(out, "Please Start or check the DB connection");
 
-                                        }
+        }
 
-                                    }
-                                %>
+    }
+%>
