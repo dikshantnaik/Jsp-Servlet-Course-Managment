@@ -57,57 +57,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
-            <div class="container ">
-                <a href="index.jsp" class="navbar-brand font-weight-bold">Course Management</a>
-
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navmenu"
-                    >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navmenu">
-                    <ul class="navbar-nav ms-auto mx-5 ">
-
-
-                        <% if (LogedIn) {
-
-                        %>
-                        <ul class="navbar-nav ms-auto mx-5 ">
-
-                            <li class="nav-item">
-                                <form action="Controller" method="post"> 
-                                    <a href="Cart.jsp" class="btn btn-primary" style="width:150px"> My Cart</a>
-                                    <button class=" btn btn-outline-danger px-3" name="logout" value="logoiut" style="height: 40px;">Log Out</button>
-                                </form>
-                            </li>
-
-
-                        </ul>
-                        <%} else {%>
-
-                        <ul class="navbar-nav ms-auto mx-5 ">
-                            <li class="nav-item">
-                                <a href="Register.jsp" class=" btn bg-primary text-white border rounded-1" style="height: 50px;">Register Now</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="Login.jsp" class="btn btn-outline-primary mx-2" style="height: 50px;">Login</a>
-                            </li>
-
-                        </ul>
-                        <%
-                            }
-                        %>
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+        <jsp:include page = "navbar.jsp" />
         <!-- Showcase -->
         <section
             class="bg-dark text-light p-4 p-lg-0 pt-lg-5 text-center text-sm-start"
@@ -115,8 +65,7 @@
             <div class="container">
                 <div class="d-sm-flex align-items-center justify-content-between">
                     <div>
-                        <%
-                            if (LogedIn) {
+                        <%                            if (LogedIn) {
                         %>
                         <h2>Welcome, <span class="text-warning"> <%=session.getValue("name")%></span></h>
                             <p class="lead my-3">
@@ -166,53 +115,8 @@
 
                                 <!--Enroled Course--> 
 
-                                <% if (LogedIn) {%>
-                                <!-- Enrolled Course Sections -->
-                                <%
-                                    String query = "SELECT available_course.course_name,enrolled_date FROM enrolled_course,available_course WHERE enrolled_course.course_id = available_course.course_id and student_id=(SELECT studentid FROM students WHERE username=\"" + session.getAttribute("username") + "\") Group by course_name";
-                                    Connection con = Dao.initSql();
-                                    PreparedStatement stmt;
-                                    try {
 
-                                        stmt = con.prepareStatement(query);
-                                        ResultSet rs = stmt.executeQuery();
-
-                                %>
-                                <section id="instructors" class="p-5 bg-primary border-bottom">
-                                    <div class="container">
-                                        <h2 class="text-center text-white">Enrolled Course</h2>
-
-                                        <div class="row g-4">
-                                            <% while (rs.next()) {%>
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card bg-light">
-
-                                                    <div class="card-body text-center">
-                                                        <img
-                                                            src="https://prod-discovery.edx-cdn.org/media/course/image/156313d6-f892-4b08-9cee-43ea582f4dfb-7b98c686abcc.small.png"
-                                                            class="img-fluid img-responsive rounded product-image"
-                                                            alt=""
-                                                            />
-                                                        <h5 class="card-title mb-3 my-3"> <%=rs.getString("course_name")%></h5>
-                                                        <p class="card-text">
-
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <%}%>
-
-                                        </div>
-                                    </div>
-                                </section>
-
-                                <%} catch (SQLException e) {
-                                            System.out.println(e);
-                                        }
-                                    }%>
-
-
+                                <jsp:include page = "EnroledCourse.jsp" />
                                 <!-- Avalible  COurse  -->
                                 <section  id= "course" class="p-5 bg-primary">
                                     <div class="container">
@@ -242,7 +146,7 @@
                                                             </div>
                                                             <div class="col-md-6 mt-1 ">
                                                                 <h3 style="color: black"><%= rs.getString("course_name")%></h3>
-                                                              
+
                                                                 <!--                                                            <div class="mt-1 mb-1 spec-1">
                                                                                                                                 <span>100% cotton</span><span class="dot"></span
                                                                                                                                 ><span>Light weight</span><span class="dot"></span

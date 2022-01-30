@@ -41,13 +41,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body class="bg-primary">
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top" style="height:80px">
-            <div class="container">
-                <a href="index.jsp" class="btn btn-primary font-weight-bold" style="margin-bottom:50px">Go Back</a>
-            </div>
-        </nav>
-
-
+       
         <div class="container" >
             <div class="row" >
                 <div class="col-12" style="margin-top:50px">

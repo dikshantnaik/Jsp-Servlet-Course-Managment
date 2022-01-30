@@ -59,11 +59,9 @@
 <%
 
     if (request.getParameter("register") != null) {
-%>
 
-<%
-        Register_login obj = new Register_login();
-        String result[] = obj.register(request.getParameter("username"), request.getParameter("password"),request.getParameter("name"),request.getParameter("stream"));
+        
+        String result[] = util.register(request.getParameter("username"), request.getParameter("password"),request.getParameter("name"),request.getParameter("stream"));
 
         if (result[0].equals("registered")) {
 //        alert(out, "Registered..Please Login to Continue");

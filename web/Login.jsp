@@ -44,8 +44,8 @@
 
 <%
     if (request.getParameter("login") != null) {
-        Register_login obj = new Register_login();
-        String result[] = obj.login(request.getParameter("username"), request.getParameter("password"));
+        
+        String result[] = util.login(request.getParameter("username"), request.getParameter("password"));
         if (result[0].equals("logedin")) {
             if(request.getParameter("remember")!=null){
                 Cookie ck = new Cookie("username", request.getParameter("username"));
