@@ -117,6 +117,8 @@
 
 
                                 <jsp:include page = "EnroledCourse.jsp" />
+                                
+                                
                                 <!-- Avalible  COurse  -->
                                 <section  id= "course" class="p-5 bg-primary">
                                     <div class="container">
@@ -128,7 +130,7 @@
 
                                                     <%
                                                         String query = "SELECT * FROM available_course LIMIT 5";
-                                                        Connection con = Dao.initSql();
+                                                        Connection con = Database.initSql();
                                                         PreparedStatement stmt;
                                                         try {
 
@@ -158,7 +160,7 @@
                                                                                                                                 ><span>Casual<br /></span>
                                                                                                                             </div>-->
                                                                 <p style="color: black"class="text-wrap text-truncate para mb-0">
-                                                                    There are many variations of passages of Lorem Ipsum available,
+                                                                    <%= rs.getString("course_discription") %>
                                                                     .<br /><br />
                                                                 </p>
                                                             </div>

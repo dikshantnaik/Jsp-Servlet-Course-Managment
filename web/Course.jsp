@@ -10,7 +10,7 @@
 <%
     String course_id = request.getParameter("course_id");
     String query = "SELECT * FROM available_course where course_id=" + course_id;
-    Connection con = Dao.initSql();
+    Connection con = Database.initSql();
     PreparedStatement stmt;
     try {
 

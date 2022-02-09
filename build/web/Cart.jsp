@@ -10,7 +10,7 @@
 <%
 
     String query = "SELECT cid,course_name,course_price from cart,available_course,students WHERE sid=students.studentid and cid= available_course.course_id and username = \"" + session.getValue("username") + "\"";
-    Connection con = Dao.initSql();
+    Connection con = Database.initSql();
     PreparedStatement stmt;
     try {
 
@@ -41,13 +41,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body class="bg-primary">
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top" style="height:80px">
-            <div class="container">
-                <a href="index.jsp" class="btn btn-primary font-weight-bold" style="margin-bottom:50px">Go Back</a>
-            </div>
-        </nav>
-
-
+       
         <div class="container" >
             <div class="row" >
                 <div class="col-12" style="margin-top:50px">
@@ -118,8 +112,9 @@
                                                     <th scope="col"></th>
                                                     <th scope="col"><%= total%></th>
                                                     <th>
-                                                        <form action="Controller" method="post">
+                                                        <form action="payment.jsp" method="post">
                                                             <button class="btn btn-success " name = "EnrollCourse" value="true" style="width: 150px">Enroll</button>
+                                                            <input type="hidden" name="total" value="<%= total %>"
                                                             <input type="hidden" name="username" value="<%= session.getAttribute("username")%>">
                                                         </form>
                                                     </th>

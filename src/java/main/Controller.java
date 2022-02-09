@@ -27,11 +27,10 @@ public class Controller extends HttpServlet {
             if (request.getParameter("SubmitReview") != null) {
 
                 String out1 = util.Review(request.getParameter("review"), request.getParameter("course_id"), request.getParameter("username"));
-                System.out.println(out1);
-                RequestDispatcher rd = request.getRequestDispatcher("Course.jsp");
-                System.out.println(out1);
 
-                rd.forward(request, response);
+                String path = "Course.jsp?course_id=" + request.getParameter("course_id");
+                response.sendRedirect(path);
+
             }
             if (request.getParameter("delete") != null) {
                 util.removeItemFromCart(request.getParameter("course_id"), request.getParameter("username"));
@@ -46,6 +45,15 @@ public class Controller extends HttpServlet {
                 response.sendRedirect("Cart.jsp");
 
             }
+            if (request.getParameter("payment") != null) {
+               util.Payment(request.getParameter("username"), request.getParameter("name"), request.getParameter("card_no"),
+                        request.getParameter("edate"), request.getParameter("cvv"), request.getParameter("course_price"),
+                         request.getParameter("fee"), request.getParameter("total"));
+                response.sendRedirect("index.jsp");
+                
+
+            }
+
         } catch (Exception e) {
             System.out.println(e);
         }

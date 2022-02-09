@@ -8,18 +8,88 @@ import java.security.*;
 import java.sql.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 
 /**
  *
  * @author dikshant
  */
 public class util {
+    static Connection con;
+    static PreparedStatement stmt;
+    static ResultSet rs;
+    static String query;
+    static String return_result [];
 
     public static void alert(JspWriter out, String msg) throws Exception {
 
         out.println("<script>alert(\"" + msg + "\")</script>");
     }
-
+    
+     public static String[] login(String username, String password) throws SQLException {
+        
+        String query = "Select * from students";
+        
+        try {
+        password = util.digest(password);    
+            con = Database.initSql();
+            stmt = con.prepareStatement(query);
+            rs = stmt.executeQuery();
+            while (rs.next()) {                
+                if (rs.getString("username").equals(username)) {
+                    if(rs.getString("password").equals(password)){
+                        return new String[] {"logedin","LogIn Sucess ! Redirecting you to Home ! HOLD ON ",rs.getString("student_name")};
+                    }
+                    else{
+                        return new String[] {"wrongpass","Bruh ! Thats a Wrong Password \\nCan't you Remember a damn password"};
+                    }
+                   
+                }
+               
+            }
+           return new String[] {"nouser","No user Found with that username! "};
+        } catch (SQLException e) {
+            return new String[] {"error",e.toString()};
+        } catch (Exception e) {
+            return new String[] {"error",e.toString()};
+        }
+        finally{
+            con.close();
+            stmt.close();
+        }
+       
+    }
+    public static String [] register(String username,String password,String student_name,String college_course){
+        query = "Insert Into students VALUES(NULL,?,?,?,?)";
+        try{
+        con = Database.initSql();
+        stmt = con.prepareStatement(query);
+        stmt.setString(1,username);
+        stmt.setString(2, student_name);
+        stmt.setString(3, college_course);
+        stmt.setString(4, util.digest(password));
+        stmt.executeUpdate();
+        
+//        Why return an Array ? the First element indicated error code and second represent Message 
+        return new String[] {"registered","Registered Success"};
+           
+        }
+        catch(SQLException e){
+            if(e.getErrorCode()==1062){
+                return new String[] {"usernameExists","Username Taken Please use Different One"};
+            }
+            return new String[] {"error",e.toString()};
+            
+        }
+        catch (Exception e){
+            return new String[] {"error",e.toString()};
+        }
+    }
     public static void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         HttpSession session = request.getSession();
@@ -58,7 +128,7 @@ public class util {
     public static String Review(String review, String course_id, String username) {
         try {
             String query = "INSERT INTO review VALUES(NULL,?,(SELECT studentid FROM students WHERE username = ?),NULL,?)";
-            Connection con = Dao.initSql();
+            Connection con = Database.initSql();
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, course_id);
             stmt.setString(2, username);
@@ -76,7 +146,7 @@ public class util {
         try {
             String query = "DELETE FROM cart WHERE sid = (SELECT studentid from students WHERE username=\"" + username + "\") and  cid= " + cid;
 
-            Connection con = Dao.initSql();
+            Connection con = Database.initSql();
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.execute();
 
@@ -88,7 +158,7 @@ public class util {
     public static void addItemToCart(String username, String course_id) {
         String query = "INSERT INTO cart VALUES((Select studentid FROM students WHERE username = ?),?)";
         try {
-            Connection con = Dao.initSql();
+            Connection con = Database.initSql();
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, username);
             stmt.setInt(2, Integer.parseInt(course_id));
@@ -103,24 +173,51 @@ public class util {
         try {
             String Selecting_Query = "SELECT sid,cid FROM cart,students WHERE sid=students.studentid and username = \"" + username + "\"";
             String Insrting_query;
-            String sid ;
-            Connection con = Dao.initSql();
+            String sid;
+            Connection con = Database.initSql();
             PreparedStatement Select_stmt = con.prepareStatement(Selecting_Query);
             ResultSet rs = Select_stmt.executeQuery();
             while (rs.next()) {
-                 sid = rs.getString("sid");
+                sid = rs.getString("sid");
                 Insrting_query = "INSERT INTO `enrolled_course`(id,student_id,course_id) VALUES (NULL,'" + sid + "' , '" + rs.getString("cid") + "')";
                 PreparedStatement Insert_stmt = con.prepareCall(Insrting_query);
                 Insert_stmt.executeUpdate();
             }
-            String Delete_Query = "DELETE FROM `cart` WHERE sid=(Select studentid FROM students where username = '"+username+"')";
+            String Delete_Query = "DELETE FROM `cart` WHERE sid=(Select studentid FROM students where username = '" + username + "')";
             PreparedStatement Delete_stmt = con.prepareStatement(Delete_Query);
             Delete_stmt.executeUpdate();
-            
 
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
+    public static void Payment(String username ,String name, String card_no,String card_edate,String cvv,String course_price,String trans_fee,String total){
+        
+         String query = "Insert Into payment VALUES(NULL,(SELECT students.studentid FROM students WHERE students.username = ? ),?,?,?,?,?,?,?)";
+         
+        try{
+        con = Database.initSql();
+        stmt = con.prepareStatement(query);
+        stmt.setString(1,username);
+        stmt.setString(2, name);
+        stmt.setString(3, card_no);
+        stmt.setString(4, card_edate);
+        stmt.setString(5, cvv);
+        stmt.setString(6, course_price);
+        stmt.setString(7, trans_fee);
+        stmt.setString(8, total);
+        stmt.executeUpdate();
+        util.EnrollCourse(username);
+        
+//        Why return an Array ? the First element indicated error code and second represent Message 
+        }
+     
+        catch (Exception e){
+            System.out.println(e);
+        }
+  
+    }
+
+
 
 }

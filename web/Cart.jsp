@@ -10,7 +10,7 @@
 <%
 
     String query = "SELECT cid,course_name,course_price from cart,available_course,students WHERE sid=students.studentid and cid= available_course.course_id and username = \"" + session.getValue("username") + "\"";
-    Connection con = Dao.initSql();
+    Connection con = Database.initSql();
     PreparedStatement stmt;
     try {
 
@@ -112,8 +112,9 @@
                                                     <th scope="col"></th>
                                                     <th scope="col"><%= total%></th>
                                                     <th>
-                                                        <form action="Controller" method="post">
+                                                        <form action="payment.jsp" method="post">
                                                             <button class="btn btn-success " name = "EnrollCourse" value="true" style="width: 150px">Enroll</button>
+                                                            <input type="hidden" name="total" value="<%= total %>"
                                                             <input type="hidden" name="username" value="<%= session.getAttribute("username")%>">
                                                         </form>
                                                     </th>

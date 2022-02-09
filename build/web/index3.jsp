@@ -8,7 +8,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 <%@page import="java.sql.*" %>
 <%
     String query = "SELECT * FROM available_course";
-    Connection con = Dao.initSql();
+    Connection con = Database.initSql();
     PreparedStatement stmt;
     try {
 
