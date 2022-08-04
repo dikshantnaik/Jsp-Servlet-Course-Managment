@@ -32,49 +32,48 @@ public class util {
     }
     
      public static String[] login(String username, String password) throws SQLException {
-        
-        String query = "Select * from students";
-        
-        try {
-        password = util.digest(password);    
-            con = Database.initSql();
-            stmt = con.prepareStatement(query);
-            rs = stmt.executeQuery();
-            while (rs.next()) {                
-                if (rs.getString("username").equals(username)) {
-                    if(rs.getString("password").equals(password)){
-                        return new String[] {"logedin","LogIn Sucess ! Redirecting you to Home ! HOLD ON ",rs.getString("student_name")};
-                    }
-                    else{
-                        return new String[] {"wrongpass","Bruh ! Thats a Wrong Password \\nCan't you Remember a damn password"};
-                    }
-                   
-                }
-               
-            }
-           return new String[] {"nouser","No user Found with that username! "};
-        } catch (SQLException e) {
-            return new String[] {"error",e.toString()};
-        } catch (Exception e) {
-            return new String[] {"error",e.toString()};
-        }
+	 Connection con = null;
+		CallableStatement cstmt = null;
+		try {
+		   String SQL = "{? = call login(?,?)}";
+		   
+		   con = Database.initSql();
+		   cstmt = con.prepareCall (SQL);
+		  cstmt.registerOutParameter(1, Types.INTEGER);
+
+		   cstmt.setString(2, username);
+		   cstmt.setString(3, password);
+		   cstmt.execute();
+		   if (cstmt.getInt(1)==1) {
+		    return new String[] {"logedin","Sucessfully Logedin"};
+		}
+		   else {
+		       return new String[] {"wrongCreads","Wrong Credentials"};
+		}
+		}
+		catch (SQLException e) {
+		   return new String[] {"error",e.toString()};
+		}
+		
         finally{
-            con.close();
             stmt.close();
+            con.close();
+            
         }
+
        
     }
     public static String [] register(String username,String password,String student_name,String college_course){
-        query = "Insert Into students VALUES(NULL,?,?,?,?)";
-        try{
-        con = Database.initSql();
-        stmt = con.prepareStatement(query);
-        stmt.setString(1,username);
-        stmt.setString(2, student_name);
-        stmt.setString(3, college_course);
-        stmt.setString(4, util.digest(password));
-        stmt.executeUpdate();
-        
+	CallableStatement cstmt = null;
+	try {
+	   String SQL = "{call Register(?, ?, ?,?)}";
+	   con = Database.initSql();
+	   cstmt = con.prepareCall (SQL);
+	   cstmt.setString(1, username);
+	   cstmt.setString(2, student_name);
+	   cstmt.setString(3, college_course);
+	   cstmt.setString(4, password);
+	   cstmt.execute();
 //        Why return an Array ? the First element indicated error code and second represent Message 
         return new String[] {"registered","Registered Success"};
            
@@ -90,25 +89,7 @@ public class util {
             return new String[] {"error",e.toString()};
         }
     }
-    public static void register2(String username,String password,String student_name,String college_course) {
-	CallableStatement cstmt = null;
-	try {
-	   String SQL = "{call Register(?, ?, ?,?)}";
-	   con = Database.initSql();
-	   cstmt = con.prepareCall (SQL);
-	   cstmt.setString(1, username);
-	   cstmt.setString(2, student_name);
-	   cstmt.setString(3, college_course);
-	   cstmt.setString(4, password);
-	   cstmt.execute();
-	   
-	   
-	}
-	catch (SQLException e) {
-	   System.out.println(e.toString());
-	}
-	
-    }
+
     
     public static void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 

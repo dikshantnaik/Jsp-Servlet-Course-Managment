@@ -22,7 +22,6 @@ public class TestSql {
 	   cstmt.execute();
 	   System.out.println(cstmt.getInt(1));
 	   
-	   
 	}
 	catch (SQLException e) {
 	   System.out.println(e.toString());
