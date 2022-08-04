@@ -90,6 +90,26 @@ public class util {
             return new String[] {"error",e.toString()};
         }
     }
+    public static void register2(String username,String password,String student_name,String college_course) {
+	CallableStatement cstmt = null;
+	try {
+	   String SQL = "{call Register(?, ?, ?,?)}";
+	   con = Database.initSql();
+	   cstmt = con.prepareCall (SQL);
+	   cstmt.setString(1, username);
+	   cstmt.setString(2, student_name);
+	   cstmt.setString(3, college_course);
+	   cstmt.setString(4, password);
+	   cstmt.execute();
+	   
+	   
+	}
+	catch (SQLException e) {
+	   System.out.println(e.toString());
+	}
+	
+    }
+    
     public static void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         HttpSession session = request.getSession();
