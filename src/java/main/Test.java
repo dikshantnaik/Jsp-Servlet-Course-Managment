@@ -2,8 +2,8 @@ package main;
 
 public class Test {
     public static void main(String[] args) {
-	 String[] result = util.register("FuckYoasu", "password", "Dikshant", "bsc");
-	System.out.println(result[1]);
+	 String result = util.Review("Nice adwd", 1, "admin");
+	System.out.println(result);
 //	System.out.println(result[1]);
     }
 }

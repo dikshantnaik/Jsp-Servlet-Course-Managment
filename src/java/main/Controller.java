@@ -26,14 +26,14 @@ public class Controller extends HttpServlet {
             }
             if (request.getParameter("SubmitReview") != null) {
 
-                String out1 = util.Review(request.getParameter("review"), request.getParameter("course_id"), request.getParameter("username"));
+                String out1 = util.Review(request.getParameter("review"),Integer.parseInt(request.getParameter("course_id")), request.getParameter("username"));
 
                 String path = "Course.jsp?course_id=" + request.getParameter("course_id");
                 response.sendRedirect(path);
 
             }
             if (request.getParameter("delete") != null) {
-                util.removeItemFromCart(request.getParameter("course_id"), request.getParameter("username"));
+                util.removeItemFromCart(Integer.parseInt( request.getParameter("course_id")), request.getParameter("username"));
                 response.sendRedirect("Cart.jsp");
             }
             if (request.getParameter("addToCart") != null) {
